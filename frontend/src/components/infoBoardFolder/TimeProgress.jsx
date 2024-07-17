@@ -6,29 +6,34 @@ import {
   dayOfYearCalculator,
   lengthOfMonthCalculator,
   workTimeCalculator,
-} from "./progressBarFillers";
+} from "../other/progressBarFillers";
 
-export function TimeProgress() {
+export function TimeProgress({ workStartHour, workFinishHour }) {
   const yearInDays = 365;
   const weekInDays = 7;
   const [dayOfYear, setDayOfYear] = useState(null);
   const [dayOfMonth, setDayOfMonth] = useState(null);
   const [lenghtOfMonth, setLenghtOfMonth] = useState(null);
   const [dayOfWeek, setDayOfWeek] = useState(null);
-  const [workStartHour, setWorkStartHour] = useState(9);
-  const [workFinishHour, setWorkFinishHour] = useState(15);
   const [workTimeProgress, setWorkTimeProgress] = useState(null);
 
   function percentageCalculator(part, whole) {
-    console.log(part, whole);
-    const correctionNumber = 2;
-    //for CSS
+    const correctionNumber = 2; //for CSS
     let percentage = (part * 100) / whole;
     if (percentage >= 95) {
       percentage = percentage - correctionNumber;
-      console.log("correctid");
     }
     return percentage;
+  }
+
+  function converTimeToHour(time) {
+    const splitedTime = time.split(":");
+    const result =
+      Number(splitedTime[0]) +
+      Number(splitedTime[1]) / 60 +
+      Number(splitedTime[2]) / 60 / 60;
+
+    return result;
   }
 
   useEffect(() => {
@@ -36,8 +41,16 @@ export function TimeProgress() {
     setDayOfMonth(dayOfMonthCalculator());
     setLenghtOfMonth(lengthOfMonthCalculator());
     setDayOfWeek(dayOfWeekCalculator());
-    setWorkTimeProgress(workTimeCalculator(workStartHour, workFinishHour));
   }, []);
+
+  useEffect(() => {
+    setWorkTimeProgress(
+      workTimeCalculator(
+        converTimeToHour(workStartHour),
+        converTimeToHour(workFinishHour)
+      )
+    );
+  }, [workStartHour, workFinishHour]);
 
   return (
     <>
@@ -60,11 +73,11 @@ export function TimeProgress() {
           <ProgressBar
             completed={percentageCalculator(
               workTimeProgress,
-              workFinishHour - workStartHour
+              converTimeToHour(workFinishHour) - converTimeToHour(workStartHour)
             )}
           />
           <p>
-            Work: {workTimeProgress}/{workFinishHour - workStartHour}
+            Work: {workTimeProgress}/{converTimeToHour(workFinishHour) - converTimeToHour(workStartHour)}
           </p>
         </div>
       </div>

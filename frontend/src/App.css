@@ -1,6 +1,5 @@
 #bgImageConainer {
-  width: 100vw;
-  height: 20vh;
+  height: 30vh;
   overflow: hidden;
 }
 
@@ -8,7 +7,7 @@
   width: 100vw;
   height: auto;
   object-fit: cover;
-  margin-top: -701px;
+  margin-top: -170px;
 }
 
 #mainContainer {
@@ -17,7 +16,6 @@
 }
 
 #infoBoard {
-  border: 10px solid #430000;
   display: flex;
   justify-content: space-around;
 }
@@ -25,7 +23,7 @@
 #infoPanel {
   min-width: 30vw;
   display: flex;
-    justify-content: center
+  justify-content: center;
 }
 
 #clockContainer {
@@ -47,14 +45,55 @@
   align-items: center;
 }
 
-#weatherContainer{
+#weatherContainer {
   display: flex;
   align-items: center;
 }
 
-#weatherIconContainer{
+#weatherIconContainer {
   margin-left: 3vw;
   margin-right: 3vw;
+}
+
+#habitTrackerHeadBarLine {
+  display: flex;
+  justify-content: space-between;
+}
+
+#habitTrackerMainContent {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+#dayContainer {
+  border: 1px solid rgba(204, 204, 204, 0.5);
+}
+
+#dayTitle {
+  text-align: center;
+  opacity: 0.5;
+}
+
+#toDoListOut {
+  margin: 6px;
+  background-color: #313131;
+  border-radius: 6px;
+}
+
+#toDoListIn {
+  padding: 1px;
+  margin: 3px;
+  font-size: smaller;
+}
+
+#toDoListDay {
+  margin: 6px;
+  text-align: end;
+}
+
+/* width */
+::-webkit-scrollbar {
+  display: none;
 }
 
 /* #root {

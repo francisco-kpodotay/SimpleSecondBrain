@@ -5,6 +5,10 @@ body{
   color: #cbcbcb
 }
 
+.section{
+  border-bottom: #404040 solid 2px;
+}
+
 
 
 /* :root {

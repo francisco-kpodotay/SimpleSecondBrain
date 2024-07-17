@@ -1,15 +1,14 @@
 import { useState, useEffect } from "react";
-import fetchWeather from "./fetchWeather";
+import fetchWeather from "../other/fetchWeather";
 
-export function Weather() {
-  const location = { name: "ICELAND", latitudeLongitude: [65, -18] };
+export function Weather({location}) {
   const [data, setData] = useState(null);
 
   useEffect(() => {
     fetchWeather(location).then((weatherDate) => {
       setData(weatherDate);
     });
-  }, []);
+  }, [location]);
 
   return data === null ? (
     <div id="infoPanel">

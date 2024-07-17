@@ -12,21 +12,31 @@ export function dayOfYearCalculator() {
 
 export function dayOfMonthCalculator() {
   const date = new Date();
-  let day = date.getDate();
+  const day = date.getDate();
   return day;
 }
 
-export function lengthOfMonthCalculator() {
+export function lengthOfMonthCalculator(monthh="current") {
   const date = new Date();
   const year = date.getFullYear();
-  const month = date.getMonth();
+  let month;
+  if (monthh === "current"){
+    month = date.getMonth();
+  }
+  if (monthh === "last"){
+    month = date.getMonth() - 1;
+  }
+
   const numDays = new Date(year, month, 0).getDate();
   return numDays;
 }
 
 export function dayOfWeekCalculator() {
   const date = new Date();
-  let day = date.getDay();
+  const day = date.getDay();
+  if (day === 0) {
+    return 7;
+  }
   return day;
 }
 
@@ -38,6 +48,9 @@ export function workTimeCalculator(startHour, finishHour) {
   const currentTimeInHour = currentHour + currentMinutesInHour;
   const workTimeLength = finishHour - startHour;
   const workTimeProgress = currentTimeInHour - startHour;
+  if (workTimeProgress <= 0) {
+    return 0;
+  }
   if (workTimeProgress > workTimeLength) {
     return workTimeLength.toFixed(2);
   }

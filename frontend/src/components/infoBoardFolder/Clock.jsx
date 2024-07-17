@@ -1,15 +1,8 @@
 import { useState, useEffect } from "react";
+import { daysList } from "../other/lists";
 
 export function Clock() {
-  const days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
+  const days = daysList();
   let time = new Date().toLocaleTimeString();
   const [ctime, setTime] = useState(time);
   const [day, setDay] = useState("");

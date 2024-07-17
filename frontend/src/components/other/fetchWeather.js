@@ -9,7 +9,6 @@ export default async function fetchWeather({ latitudeLongitude }) {
     text: weatherData.current.condition.text,
     icon: weatherData.current.condition.icon,
   };
-  console.log(result);
   return result;
 }
 //fetchWeather({ name: "Iceland", latitudeLongitude: [65, -18] });
