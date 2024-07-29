@@ -1,50 +1,41 @@
 import { useEffect, useState } from "react";
-import { dayOfMonthCalculator } from "../other/progressBarFillers";
+import Action from "./Action";
 
-export function Day(props) {
-  const date = props.date;
+export function Day({ day, handleActionChange }) {
+  const [progress, setProgress] = useState(0);
 
+  // Calculate the completion percentage
   useEffect(() => {
+    const totalActions = day.actions.length;
+    const completedActions = day.actions.filter(
+      (action) => action.complete
+    ).length;
+    const progressPercentage = totalActions
+      ? (completedActions / totalActions) * 100
+      : 0;
+    setProgress(progressPercentage);
   }, []);
 
   return (
     <div id="dayContainer">
-      <p id="toDoListDay">{date}</p>
+      <p id="toDoListDay">{day.date}</p>
       <div id="toDoListOut">
         <div id="toDoListIn">
-          <p>
-            <strong>Title</strong>
-          </p>
-          <p>month 8, year</p>
-          <input type="checkbox" />
-          <label>💦Skin Care Routine</label>
-          <br></br>
-          <input type="checkbox" />
-          <label>🧘🏽‍♂️Meditation</label>
-          <br></br>
-          <input type="checkbox" />
-          <label>📕Journaling</label>
-          <br></br>
-          <input type="checkbox" />
-          <label>🏃🏽‍♂️Workout</label>
-          <br></br>
-          <input type="checkbox" />
-          <label>📚Read</label>
-          <br></br>
-          <input type="checkbox" />
-          <label>💻Work On My Skill</label>
-          <br></br>
-          <input type="checkbox" />
-          <label>🍀Go Outside</label>
-          <br></br>
-          <input type="checkbox" />
-          <label>👨🏿‍👩🏻‍👦🏽‍👦🏾Family Time</label>
-          <br></br>
-          <progress value={0.45}></progress>
+          {day.actions.map((action, index) => (
+            <Action
+              title={action.name}
+              complete={action.complete}
+              handleChange={() => handleActionChange(day.id, action)}
+              key={index}
+            />
+          ))}
+          {day.actions.length > 0 ? (
+            <progress value={progress} max={100}></progress>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     </div>
   );
 }
-
-

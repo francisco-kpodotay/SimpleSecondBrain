@@ -1,6 +1,15 @@
 import { LineChart, axisClasses } from "@mui/x-charts";
 
-export default function MyChart() {
+export default function MyChart({ dates }) {
+  // Extract date strings and action counts from the `dates` prop
+  const xAxisData = dates.map(day => day.date);
+  const seriesData = dates.map(day => {
+    const totalActions = day.actions.length;
+    const completedActions = day.actions.filter(action => action.complete).length;
+    // Avoid division by zero
+    return totalActions > 0 ? (completedActions / totalActions) * 100 : 0;
+  });
+
   return (
     <LineChart
       sx={() => ({
@@ -17,25 +26,24 @@ export default function MyChart() {
       colors={["#cbcbcb"]}
       xAxis={[
         {
-          id: "barCategories",
-          data: ["06.19", "0.20", "0.21", "0.22", "0.23", "0.24", "0.25"],
+          id: "dateAxis",
+          data: xAxisData, // Use the extracted date array
           scaleType: "point",
         },
       ]}
       series={[
         {
-          data: [33, 90, 10, null, 75, 25, 99],
+          data: seriesData, // Use the extracted series data
         },
       ]}
       height={300}
       grid={{ vertical: true, horizontal: true }}
       bottomAxis={{
-        disableTicks: true,
+        disableTicks: false, // Adjust if needed
       }}
       leftAxis={{
-        disableTicks: true,
+        disableTicks: false, // Adjust if needed
       }}
     />
   );
 }
-
