@@ -91,7 +91,7 @@ export function UpdateUser() {
 
   return (
     <div>
-      <h2>Update</h2>
+      <h2>{title}</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="username-update">Username: </label>

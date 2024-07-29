@@ -6,6 +6,7 @@ import { Day } from "./Day";
 export function Calendar(props) {
   const weekView = props.isWeekView;
   const datesOfWeekList = datesOfWeek();
+  //console.log(datesOfWeekList);
 
   if (weekView) {
     return (
