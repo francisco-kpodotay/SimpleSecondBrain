@@ -4,7 +4,16 @@ import Action from "./Action";
 export function Day({ day, handleActionChange }) {
   const [progress, setProgress] = useState(0);
 
-  // Calculate the completion percentage
+  function sortByComplition(a,b){
+    if (a.complete === b.complete) {
+      return 0; // No change in order if both are the same
+    } else if (a.complete && !b.complete) {
+      return 1; // Completed actions move down the list
+    } else {
+      return -1; // Incomplete actions move up the list
+    }
+  }
+
   useEffect(() => {
     const totalActions = day.actions.length;
     const completedActions = day.actions.filter(
@@ -21,7 +30,7 @@ export function Day({ day, handleActionChange }) {
       <p id="toDoListDay">{day.date}</p>
       <div id="toDoListOut">
         <div id="toDoListIn">
-          {day.actions.map((action, index) => (
+          {day.actions.sort(sortByComplition).map((action, index) => (
             <Action
               title={action.name}
               complete={action.complete}

@@ -30,6 +30,8 @@ export function HabitTracker() {
       );
       if (!response.ok) throw new Error("Network response was not ok.");
       const days = await response.json();
+      console.log(days);
+
       return days;
     } catch (error) {
       console.error("Error fetching days:", error);
@@ -121,6 +123,7 @@ export function HabitTracker() {
 
   async function putAction(dayId, action) {
     const storedPublicId = JSON.parse(localStorage.getItem("publicId"));
+    if (!storedPublicId) return;
 
     try {
       const response = await fetch(
@@ -151,7 +154,8 @@ export function HabitTracker() {
 
   useEffect(() => {
     fetchDates();
-  }, [displayFormat]);
+    console.log(filledDates);
+  }, [displayFormat, showAddAction]);
 
   return (
     <>
@@ -172,11 +176,9 @@ export function HabitTracker() {
                 <div id="plus-icon" onClick={() => setShowAddAction(true)}>
                   <FaCirclePlus size={23} />
                 </div>
-                <p>
                   {showAddAction && (
                     <AddAction doClose={() => setShowAddAction(false)} />
                   )}
-                </p>
               </div>
               <div id="arrow-icon">
                 <FaChevronLeft size={21} />
