@@ -8,8 +8,8 @@ import { useEffect, useState } from "react";
 
 export function InfoBoard() {
   const [showSettings, setShowSettings] = useState(false);
-  const [workStartHour, setWorkStartHour] = useState('09:00:00');
-  const [workFinishHour, setWorkFinishHour] = useState('15:00:00');
+  const [workStartHour, setWorkStartHour] = useState("09:00:00");
+  const [workFinishHour, setWorkFinishHour] = useState("15:00:00");
   const [location, setLocation] = useState({
     name: "ICELAND",
     latitudeLongitude: [65, -18],
@@ -47,7 +47,10 @@ export function InfoBoard() {
         <div id="infoBoard">
           <Clock />
           <Weather location={location} />
-           <TimeProgress workStartHour={workStartHour} workFinishHour={workFinishHour}/>
+          <TimeProgress
+            workStartHour={workStartHour}
+            workFinishHour={workFinishHour}
+          />
         </div>
       </div>
     </>

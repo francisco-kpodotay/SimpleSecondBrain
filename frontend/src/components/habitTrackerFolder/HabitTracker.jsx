@@ -3,12 +3,17 @@ import { monthsList } from "../other/lists";
 import { Calendar } from "./Calendar";
 import { WeekMonthSwitch } from "./WeekMonthSwitch";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaCirclePlus } from "react-icons/fa6";
+import "./habitTracker.css"
+
 import MyChart from "./chart/MyChart";
+import { AddAction } from "./AddAction";
 
 export function HabitTracker() {
   const date = new Date();
   const months = monthsList();
 
+  const [showAddAction, setShowAddAction] = useState(false);
   const [displayFormat, setDisplayFormat] = useState("week");
   const [filledDates, setFilledDates] = useState([]);
 
@@ -57,17 +62,14 @@ export function HabitTracker() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
 
-    // Get the first and last day of the month
     const firstDayOfMonth = new Date(year, month, 1);
     const lastDayOfMonth = new Date(year, month + 1, 0);
 
-    // Ensure the first day is Monday
     const firstMonday = new Date(firstDayOfMonth);
     while (firstMonday.getDay() !== 1) {
       firstMonday.setDate(firstMonday.getDate() + 1);
     }
 
-    // Ensure the last day is Sunday
     let firstSundayAfterLastDay = new Date(lastDayOfMonth);
     while (firstSundayAfterLastDay.getDay() !== 0) {
       firstSundayAfterLastDay.setDate(firstSundayAfterLastDay.getDate() + 1);
@@ -78,9 +80,7 @@ export function HabitTracker() {
     currentDay.setDate(currentDay.getDate() + 1);
     firstSundayAfterLastDay.setDate(firstSundayAfterLastDay.getDate() + 1);
 
-    // Iterate over all the days from the first Monday to the first Sunday after the last day of the month
     while (currentDay <= firstSundayAfterLastDay) {
-      console.log(currentDay);
       monthDates.push(currentDay.toISOString().slice(0, 10));
       currentDay.setDate(currentDay.getDate() + 1);
     }
@@ -159,7 +159,9 @@ export function HabitTracker() {
         <div id="habitTrackerContainer">
           <div id="habitTrackerHeadBar">
             <div id="habitTrackerHeadBarLine">
-              <h2 id="habitTrackerTitle">Habit Tracker</h2>
+              <h2 id="habitTrackerTitle">
+                Habit Tracker - {months[date.getMonth()]} {date.getFullYear()}
+              </h2>
               <WeekMonthSwitch
                 displayFormath={displayFormat}
                 changeDisplay={handleChangeDisplay}
@@ -167,13 +169,18 @@ export function HabitTracker() {
             </div>
             <div id="habitTrackerHeadBarLine">
               <div id="habitTrackerDateTitle">
-                <strong>
-                  {months[date.getMonth()]} {date.getFullYear()}
-                </strong>
+                <div id="plus-icon" onClick={() => setShowAddAction(true)}>
+                  <FaCirclePlus size={23} />
+                </div>
+                <p>
+                  {showAddAction && (
+                    <AddAction doClose={() => setShowAddAction(false)} />
+                  )}
+                </p>
               </div>
-              <div id="habitTrackerDateSwitcher">
-                <FaChevronLeft />
-                <FaChevronRight onClick={() => console.log("hellllo")} />
+              <div id="arrow-icon">
+                <FaChevronLeft size={21} />
+                <FaChevronRight size={21} onClick={() => console.log("hellllo")} />
               </div>
             </div>
           </div>
