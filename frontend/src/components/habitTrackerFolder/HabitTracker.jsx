@@ -1,26 +1,36 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { monthsList } from "../other/lists";
 import { Calendar } from "./Calendar";
 import { WeekMonthSwitch } from "./WeekMonthSwitch";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { FaCirclePlus } from "react-icons/fa6";
-import "./habitTracker.css"
+import "./habitTracker.css";
 
 import MyChart from "./chart/MyChart";
 import { AddAction } from "./AddAction";
 
 export function HabitTracker() {
-  const date = new Date();
+  const currentDate = new Date();
   const months = monthsList();
 
   const [showAddAction, setShowAddAction] = useState(false);
   const [displayFormat, setDisplayFormat] = useState("week");
   const [filledDates, setFilledDates] = useState([]);
+  const [weekDate, setWeekDate] = useState(currentDate);
+  const [monthDate, setMonthDate] = useState(currentDate);
+
+  const weekCorrectionNumber = useRef(0);
+  const monthCorrectionNumber = useRef(0);
 
   function handleChangeDisplay() {
-    setDisplayFormat((prevFormat) =>
-      prevFormat === "week" ? "month" : "week"
-    );
+    if (displayFormat === "week") {
+      setDisplayFormat("month");
+      setWeekDate(currentDate);
+    }
+    if (displayFormat === "month") {
+      setDisplayFormat("week");
+      setMonthDate(currentDate);
+    }
   }
 
   async function fetchDays(publicId, startDate, endDate) {
@@ -30,7 +40,7 @@ export function HabitTracker() {
       );
       if (!response.ok) throw new Error("Network response was not ok.");
       const days = await response.json();
-      console.log(days);
+      //console.log(days);
 
       return days;
     } catch (error) {
@@ -40,15 +50,16 @@ export function HabitTracker() {
   }
 
   function getWeekStartEndDates() {
-    const currentDay = date.getDay();
+    //console.log("week date: ", weekDate);
+    const currentDay = weekDate.getDay();
     const daysToMonday = currentDay === 0 ? 6 : currentDay - 1;
     const daysToSunday = currentDay === 0 ? 0 : 7 - currentDay;
 
-    const monday = new Date(date);
-    const sunday = new Date(date);
+    const monday = new Date(weekDate);
+    const sunday = new Date(weekDate);
 
-    monday.setDate(date.getDate() - daysToMonday);
-    sunday.setDate(date.getDate() + daysToSunday);
+    monday.setDate(weekDate.getDate() - daysToMonday);
+    sunday.setDate(weekDate.getDate() + daysToSunday);
 
     const weekDates = [];
     for (let i = 0; i <= 6; i++) {
@@ -60,18 +71,20 @@ export function HabitTracker() {
   }
 
   function getMonthDates() {
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
+    //const currentDate = new Date();
+    const year = monthDate.getFullYear();
+    const month = monthDate.getMonth();
 
     const firstDayOfMonth = new Date(year, month, 1);
     const lastDayOfMonth = new Date(year, month + 1, 0);
 
+    // Find the first Monday before or on the first day of the month
     const firstMonday = new Date(firstDayOfMonth);
     while (firstMonday.getDay() !== 1) {
-      firstMonday.setDate(firstMonday.getDate() + 1);
+      firstMonday.setDate(firstMonday.getDate() - 1);
     }
 
+    // Find the first Sunday after the last day of the month
     let firstSundayAfterLastDay = new Date(lastDayOfMonth);
     while (firstSundayAfterLastDay.getDay() !== 0) {
       firstSundayAfterLastDay.setDate(firstSundayAfterLastDay.getDate() + 1);
@@ -79,6 +92,7 @@ export function HabitTracker() {
 
     const monthDates = [];
     let currentDay = new Date(firstMonday);
+
     currentDay.setDate(currentDay.getDate() + 1);
     firstSundayAfterLastDay.setDate(firstSundayAfterLastDay.getDate() + 1);
 
@@ -152,10 +166,42 @@ export function HabitTracker() {
     }
   }
 
+  function handlePreviousButton() {
+    if (displayFormat === "week") {
+      weekCorrectionNumber.current -= 7;
+      const newWeekDate = new Date();
+      newWeekDate.setDate(currentDate.getDate() + weekCorrectionNumber.current);
+      setWeekDate(newWeekDate);
+    } else if (displayFormat === "month") {
+      monthCorrectionNumber.current -= 1;
+      const newMonthDate = new Date();
+      newMonthDate.setMonth(
+        currentDate.getMonth() + monthCorrectionNumber.current
+      );
+      setMonthDate(newMonthDate);
+    }
+  }
+
+  function handleNextButton() {
+    if (displayFormat === "week") {
+      weekCorrectionNumber.current += 7;
+      const newWeekDate = new Date();
+      newWeekDate.setDate(currentDate.getDate() + weekCorrectionNumber.current);
+      setWeekDate(newWeekDate);
+    } else if (displayFormat === "month") {
+      monthCorrectionNumber.current += 1;
+      const newMonthDate = new Date();
+      newMonthDate.setMonth(
+        currentDate.getMonth() + monthCorrectionNumber.current
+      );
+      setMonthDate(newMonthDate);
+    }
+  }
+
   useEffect(() => {
     fetchDates();
-    console.log(filledDates);
-  }, [displayFormat, showAddAction]);
+    //console.log(filledDates);
+  }, [displayFormat, showAddAction, weekDate, monthDate]);
 
   return (
     <>
@@ -164,7 +210,8 @@ export function HabitTracker() {
           <div id="habitTrackerHeadBar">
             <div id="habitTrackerHeadBarLine">
               <h2 id="habitTrackerTitle">
-                Habit Tracker - {months[date.getMonth()]} {date.getFullYear()}
+                Habit Tracker - {months[currentDate.getMonth()]}{" "}
+                {currentDate.getFullYear()}
               </h2>
               <WeekMonthSwitch
                 displayFormath={displayFormat}
@@ -176,13 +223,16 @@ export function HabitTracker() {
                 <div id="plus-icon" onClick={() => setShowAddAction(true)}>
                   <FaCirclePlus size={23} />
                 </div>
-                  {showAddAction && (
-                    <AddAction doClose={() => setShowAddAction(false)} />
-                  )}
+                {showAddAction && (
+                  <AddAction doClose={() => setShowAddAction(false)} />
+                )}
               </div>
               <div id="arrow-icon">
-                <FaChevronLeft size={21} />
-                <FaChevronRight size={21} onClick={() => console.log("hellllo")} />
+                <FaChevronLeft
+                  size={21}
+                  onClick={() => handlePreviousButton()}
+                />
+                <FaChevronRight size={21} onClick={() => handleNextButton()} />
               </div>
             </div>
           </div>

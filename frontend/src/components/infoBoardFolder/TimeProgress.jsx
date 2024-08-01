@@ -18,7 +18,7 @@ export function TimeProgress({ workStartHour, workFinishHour }) {
   const [workTimeProgress, setWorkTimeProgress] = useState(null);
 
   function percentageCalculator(part, whole) {
-    const correctionNumber = 2; //for CSS
+    const correctionNumber = 5; //for CSS
     let percentage = (part * 100) / whole;
     if (percentage >= 95) {
       percentage = percentage - correctionNumber;

@@ -17,9 +17,9 @@ export function AddAction({ doClose }) {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ name: text }) 
+        body: JSON.stringify({ name: text })
       });
-
+      
       if (!response.ok) {
         console.error('Add failed');
         setTitle('Add action failed. Try again!');
