@@ -5,3 +5,24 @@
 #arrow-icon{
   cursor: pointer;
 }
+
+#dayHeadbar{
+  display: flex;
+  justify-content: space-between;
+}
+
+#editIcon{
+  display: flex;
+  align-items: center;
+  margin: 6px;
+}
+
+#toDoListDay {
+  margin: 6px;
+}
+
+#editActionLine{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}

@@ -1,10 +1,17 @@
 import { useEffect, useState } from "react";
 import Action from "./Action";
+import { FaPenSquare } from "react-icons/fa";
+import { EditAction } from "./EditAction";
 
-export function Day({ day, handleActionChange }) {
+export function Day({
+  day,
+  handleActionChange,
+  fetchDates
+}) {
   const [progress, setProgress] = useState(0);
+  const [showEditAction, setShowEditAction] = useState(false);
 
-  function sortByComplition(a,b){
+  function sortByComplition(a, b) {
     if (a.complete === b.complete) {
       return 0; // No change in order if both are the same
     } else if (a.complete && !b.complete) {
@@ -27,7 +34,25 @@ export function Day({ day, handleActionChange }) {
 
   return (
     <div id="dayContainer">
-      <p id="toDoListDay">{day.date}</p>
+      <div id="dayHeadbar">
+        <div
+          id="editIcon"
+          onClick={() => {
+            setShowEditAction(true);
+          }}
+        >
+          <FaPenSquare size={22} />
+        </div>
+        {showEditAction && (
+          <EditAction
+            day={day}
+            doClose={() => setShowEditAction(false)}
+            sortByComplition={sortByComplition}
+            fetchDates={fetchDates}
+          />
+        )}
+        <p id="toDoListDay">{day.date}</p>
+      </div>
       <div id="toDoListOut">
         <div id="toDoListIn">
           {day.actions.sort(sortByComplition).map((action, index) => (

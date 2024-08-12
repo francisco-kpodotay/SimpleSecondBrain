@@ -13,9 +13,20 @@ export function UpdateUser() {
   const [workEndTime, setWorkEndTime] = useState('');
   const [country, setCountry] = useState('');
 
+  function alphaetSort(a, b) {
+    if (a.name < b.name) {
+      return -1;
+    }
+    if (a.name > b.name) {
+      return 1;
+    }
+    return 0;
+  }
+
   useEffect(() => {
     const fetchCountries = async () => {
-      const result = await fetchCountry();
+      let result = await fetchCountry();
+      result = result.sort(alphaetSort)
       setCountrys(result);
     };
 

@@ -75,7 +75,8 @@
 }
 
 #toDoListOut {
-  margin: 6px;
+  margin-left: 6px;
+  margin-right: 6px;
   background-color: #313131;
   border-radius: 6px;
 }
@@ -86,10 +87,7 @@
   font-size: smaller;
 }
 
-#toDoListDay {
-  margin: 6px;
-  text-align: end;
-}
+
 
 /* width */
 ::-webkit-scrollbar {

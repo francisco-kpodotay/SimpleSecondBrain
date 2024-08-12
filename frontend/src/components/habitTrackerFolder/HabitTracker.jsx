@@ -40,7 +40,6 @@ export function HabitTracker() {
       );
       if (!response.ok) throw new Error("Network response was not ok.");
       const days = await response.json();
-      //console.log(days);
 
       return days;
     } catch (error) {
@@ -50,7 +49,6 @@ export function HabitTracker() {
   }
 
   function getWeekStartEndDates() {
-    //console.log("week date: ", weekDate);
     const currentDay = weekDate.getDay();
     const daysToMonday = currentDay === 0 ? 6 : currentDay - 1;
     const daysToSunday = currentDay === 0 ? 0 : 7 - currentDay;
@@ -71,7 +69,6 @@ export function HabitTracker() {
   }
 
   function getMonthDates() {
-    //const currentDate = new Date();
     const year = monthDate.getFullYear();
     const month = monthDate.getMonth();
 
@@ -200,7 +197,6 @@ export function HabitTracker() {
 
   useEffect(() => {
     fetchDates();
-    //console.log(filledDates);
   }, [displayFormat, showAddAction, weekDate, monthDate]);
 
   return (
@@ -237,9 +233,9 @@ export function HabitTracker() {
             </div>
           </div>
           <Calendar
-            isWeekView={displayFormat}
             dates={filledDates}
             handleActionChange={putAction}
+            fetchDates={fetchDates}
           />
         </div>
       </div>
