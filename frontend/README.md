@@ -8,8 +8,6 @@
 
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
 The "Second Brain" project is a single-page application featuring a clock, habit tracker, progress bars, and weather data. This project demonstrates my skills in frontend development, UI/UX design, and integrating various APIs to provide a seamless and efficient user experience.
 
 Here's why:
@@ -32,9 +30,14 @@ To get a local copy up and running follow these simple steps.
 ### Installation
 
 1. Clone the repository:
-   ```sh
-   npm install
-   ```
+    ```sh
+    npm install
+    ```
+2. Run the program 
+    ```sh
+    npm run dev
+    ```
+
 
 ## Contact
 Kpodo-Tay Francisco - [LinkedIn](https://www.linkedin.com/in/francisco-kpodotay/) - kpodotay.francisco@gmail.com
