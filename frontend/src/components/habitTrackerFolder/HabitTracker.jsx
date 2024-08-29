@@ -52,7 +52,7 @@ export function HabitTracker() {
     const currentDay = weekDate.getDay();
     const daysToMonday = currentDay === 0 ? 6 : currentDay - 1;
     const daysToSunday = currentDay === 0 ? 0 : 7 - currentDay;
-
+    
     const monday = new Date(weekDate);
     const sunday = new Date(weekDate);
 
