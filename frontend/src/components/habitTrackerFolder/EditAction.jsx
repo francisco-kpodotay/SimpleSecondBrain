@@ -4,14 +4,15 @@ import { useState } from "react";
 
 export function EditAction({ doClose, day, sortByComplition,fetchDates }) {
   const [title, setTitle] = useState("Delete Action");
+console.log(day);
 
-  async function handleDelete(dayId, actionId) {
+  async function handleDelete(date, actionId) {
     const storedPublicId = JSON.parse(localStorage.getItem("publicId"));
     if (!storedPublicId) return;
 
     try {
       const response = await fetch(
-        `/api/day/${storedPublicId}/${dayId}/${actionId}`,
+        `/api/day/${storedPublicId}/${date}/${actionId}`,
         {
           method: "DELETE",
           headers: {
@@ -22,7 +23,7 @@ export function EditAction({ doClose, day, sortByComplition,fetchDates }) {
 
       if (!response.ok) {
         console.error("Delete failed");
-        setTitle("Delete action failed. Try again!");
+        setTitle("Delete action failed.");
         return;
       }
 
@@ -35,8 +36,6 @@ export function EditAction({ doClose, day, sortByComplition,fetchDates }) {
     }
   }
 
-  console.log(day);
-  
 
   return (
     <div id="modal-bg">
@@ -48,7 +47,7 @@ export function EditAction({ doClose, day, sortByComplition,fetchDates }) {
         {day.actions.sort(sortByComplition).map((action, index) => (
           <div id="editActionLine" key={index}>
             <p>{action.name}</p>
-            <div onClick={()=>handleDelete(day.id, action.id)}>
+            <div onClick={()=>handleDelete(day.date, action.id)}>
               <ImBin />
             </div>
           </div>

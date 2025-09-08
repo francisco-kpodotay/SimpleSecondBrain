@@ -1,17 +1,17 @@
-import { useState, useEffect } from 'react';
-import fetchCountry from '../other/fetchCountry';
+import { useState, useEffect } from "react";
+import fetchCountry from "../other/fetchCountry";
 
 export function UpdateUser() {
-  const [title, setTitle] = useState('Update')
+  const [title, setTitle] = useState("Update");
   const [countrys, setCountrys] = useState([]);
-  const [publicId, setPublicId] = useState('');
-  const [userName, setUserName] = useState('');
-  const [password, setPassword] = useState('');
-  const [latitude, setLatitude] = useState('');
-  const [longitude, setLongitude] = useState('');
-  const [workStartTime, setWorkStartTime] = useState('');
-  const [workEndTime, setWorkEndTime] = useState('');
-  const [country, setCountry] = useState('');
+  const [publicId, setPublicId] = useState("");
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
+  const [workStartTime, setWorkStartTime] = useState("");
+  const [workEndTime, setWorkEndTime] = useState("");
+  const [country, setCountry] = useState("");
 
   function alphaetSort(a, b) {
     if (a.name < b.name) {
@@ -26,7 +26,7 @@ export function UpdateUser() {
   useEffect(() => {
     const fetchCountries = async () => {
       let result = await fetchCountry();
-      result = result.sort(alphaetSort)
+      result = result.sort(alphaetSort);
       setCountrys(result);
     };
 
@@ -34,8 +34,8 @@ export function UpdateUser() {
   }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const storedPublicId = JSON.parse(localStorage.getItem('publicId'));
+    const fetchUserData = async () => {
+      const storedPublicId = JSON.parse(localStorage.getItem("publicId"));
       if (!storedPublicId) return;
 
       setPublicId(storedPublicId);
@@ -49,14 +49,16 @@ export function UpdateUser() {
       setLongitude(userData.longitude);
       setWorkStartTime(userData.workStartTime);
       setWorkEndTime(userData.workEndTime);
-      setCountry(userData.country); 
+      setCountry(userData.country);
     };
 
-    fetchData();
+    fetchUserData();
   }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
+    const storedPublicId = JSON.parse(localStorage.getItem("publicId"));
+      if (!storedPublicId) return;
 
     const userData = {
       userName,
@@ -65,44 +67,42 @@ export function UpdateUser() {
       longitude,
       workStartTime,
       workEndTime,
-      country  
+      country,
     };
 
     try {
       const response = await fetch(`/api/user/${publicId}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(userData)
+        body: JSON.stringify(userData),
       });
 
       if (!response.ok) {
-        console.error('Update failed');
-        setTitle('Update failed')
+        setTitle("Update failed");
         return;
       }
 
       const updatedUser = await response.json();
-      console.log('User updated successfully:', updatedUser);
-      setTitle('User updated successfully')
-
+      console.log("User updated successfully:", updatedUser);
+      setTitle("User updated successfully");
     } catch (error) {
-      console.error('Error updating user:', error);
-      setTitle('Error updating user')
+      console.error("Error updating user:", error);
+      setTitle("Error updating user");
     }
   }
 
   function handleCountryChange(e) {
-    setCountry(e.target.options[e.target.selectedIndex].getAttribute('name'))
-    const selectedCountry = e.target.value.split(',');
+    setCountry(e.target.options[e.target.selectedIndex].getAttribute("name"));
+    const selectedCountry = e.target.value.split(",");
     setLatitude(selectedCountry[0]);
     setLongitude(selectedCountry[1]);
   }
 
   return (
     <div>
-      <h2>{title}</h2>
+      <h2 value={title}>{title}</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="username-update">Username: </label>
@@ -127,16 +127,17 @@ export function UpdateUser() {
         <div>
           <label htmlFor="country-update">Country: </label>
           <select
-            name='countrys'
-            id='country-update'
+            name="countrys"
+            id="country-update"
             onChange={handleCountryChange}
             value={`${latitude},${longitude}`}
           >
-            {countrys && countrys.map((c) => (
-              <option key={c.name} value={`${c.lat},${c.long}`} name={c.name}>
-                {c.name}
-              </option>
-            ))}
+            {countrys &&
+              countrys.map((c) => (
+                <option key={c.name} value={`${c.lat},${c.long}`} name={c.name}>
+                  {c.name}
+                </option>
+              ))}
           </select>
         </div>
         <div>
@@ -146,6 +147,7 @@ export function UpdateUser() {
             id="latitude-update"
             value={latitude}
             onChange={(e) => setLatitude(e.target.value)}
+            disabled={true}
           />
         </div>
         <div>
@@ -155,6 +157,7 @@ export function UpdateUser() {
             id="longitude-update"
             value={longitude}
             onChange={(e) => setLongitude(e.target.value)}
+            disabled={true}
           />
         </div>
         <div>
@@ -164,6 +167,7 @@ export function UpdateUser() {
             id="workStartTime-update"
             value={workStartTime}
             onChange={(e) => setWorkStartTime(e.target.value)}
+            placeholder="09:00:00"
           />
         </div>
         <div>
@@ -173,6 +177,7 @@ export function UpdateUser() {
             id="workEndTime-update"
             value={workEndTime}
             onChange={(e) => setWorkEndTime(e.target.value)}
+            placeholder="18:00:00"
           />
         </div>
         <button type="submit">Update User</button>

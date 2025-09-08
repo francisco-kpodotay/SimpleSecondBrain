@@ -33,8 +33,6 @@ export function Register() {
       setTitle('Registered successfully')
       console.log('Registered successfully:', newUser);
 
-
-      // Optionally, you can redirect to another page or handle success in UI
     } catch (error) {
       console.error('Error registering:', error);
       setTitle('Error registering')

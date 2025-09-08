@@ -59,7 +59,7 @@ export function Day({
             <Action
               title={action.name}
               complete={action.complete}
-              handleChange={() => handleActionChange(day.id, action)}
+              handleChange={() => handleActionChange(day.date, action)}
               key={index}
             />
           ))}

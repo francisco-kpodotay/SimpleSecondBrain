@@ -49,24 +49,29 @@ export function HabitTracker() {
   }
 
   function getWeekStartEndDates() {
+    // 1 (Mon) 2 (Tue) 3 (Wed) 4 (Thu) 5 (Fri) 6 (Sat) 0 (Sun) 
     const currentDay = weekDate.getDay();
     const daysToMonday = currentDay === 0 ? 6 : currentDay - 1;
-    const daysToSunday = currentDay === 0 ? 0 : 7 - currentDay;
     
     const monday = new Date(weekDate);
-    const sunday = new Date(weekDate);
-
+    
     monday.setDate(weekDate.getDate() - daysToMonday);
-    sunday.setDate(weekDate.getDate() + daysToSunday);
 
     const weekDates = [];
     for (let i = 0; i <= 6; i++) {
       const date = new Date(monday);
       date.setDate(monday.getDate() + i);
-      weekDates.push(date.toISOString().slice(0, 10));
+      weekDates.push(formatDateHungarianLocal(date));
     }
     return weekDates;
   }
+
+  function formatDateHungarianLocal(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+}
 
   function getMonthDates() {
     const year = monthDate.getFullYear();
@@ -102,13 +107,13 @@ export function HabitTracker() {
   }
 
   function fillDaysWithActions(weekDays, fetchedDays) {
-    const filledDays = weekDays.map((day, index) => {
-      return fetchedDays[index]
-        ? fetchedDays[index]
-        : { date: day, actions: [] };
+    const filledDays = weekDays.map(day => {
+        const match = fetchedDays.find(f => f.date === day);
+
+        return match ? match : { date: day, actions: [] };
     });
     return filledDays;
-  }
+}
 
   async function fetchDates() {
     const storedPublicId = JSON.parse(localStorage.getItem("publicId"));
@@ -132,21 +137,19 @@ export function HabitTracker() {
     setFilledDates(filledDates);
   }
 
-  async function putAction(dayId, action) {
+  async function putAction(date, action) {
     const storedPublicId = JSON.parse(localStorage.getItem("publicId"));
     if (!storedPublicId) return;
 
     try {
       const response = await fetch(
-        `/api/day/${storedPublicId}/${dayId}/${action.id}`,
+        `/api/day/${storedPublicId}/${date}/${action.id}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            id: action.id,
-            name: action.name,
             complete: !action.complete,
           }),
         }

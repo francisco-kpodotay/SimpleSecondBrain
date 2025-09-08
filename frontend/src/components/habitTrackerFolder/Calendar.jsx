@@ -2,7 +2,7 @@
 import { CalendarHeadLine } from "./CalendarHeadLine";
 import { Day } from "./Day";
 
-export function Calendar({ dates, handleActionChange, showEditAction ,setShowEditAction, fetchDates}) {
+export function Calendar({ dates, handleActionChange, showEditAction , setShowEditAction, fetchDates}) {
   return (
     <div id="habitTrackerMainContent">
       <CalendarHeadLine />

@@ -12,7 +12,8 @@ export function Modal({ doClose }) {
           <FaWindowClose />
         </div>
         <Register />
-        <Login />
+        {/* // !! login functionality currently not used in frontend !!  */}
+        {/* <Login /> */}
         <UpdateUser />
       </div>
     </div>

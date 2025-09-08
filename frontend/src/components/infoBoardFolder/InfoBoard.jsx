@@ -23,6 +23,7 @@ export function InfoBoard() {
       const response = await fetch(`/api/user/${storedPublicId}`);
       const userData = await response.json();
 
+      if (!userData) return;
       setLocation({
         name: userData.country,
         latitudeLongitude: [userData.latitude, userData.longitude],
