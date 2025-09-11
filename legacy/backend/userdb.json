@@ -1,0 +1,12 @@
+[
+  {
+    "publicId": "9741a2b0-ad39-48e5-bb9c-1a8cd771f233",
+    "userName": "test",
+    "password": "test",
+    "latitude": "47.5",
+    "longitude": "19.08",
+    "workStartTime": "09:00:00",
+    "workEndTime": "21:00:00",
+    "country": "Hungary"
+  }
+]

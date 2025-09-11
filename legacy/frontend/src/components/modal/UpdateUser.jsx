@@ -34,11 +34,9 @@ export function UpdateUser() {
   }, []);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      const storedPublicId = JSON.parse(localStorage.getItem("publicId"));
+    const fetchUserData = async (storedPublicId) => {
       if (!storedPublicId) return;
-
-      setPublicId(storedPublicId);
+      console.log(storedPublicId);
 
       const response = await fetch(`/api/user/${storedPublicId}`);
       const userData = await response.json();
@@ -52,13 +50,19 @@ export function UpdateUser() {
       setCountry(userData.country);
     };
 
-    fetchUserData();
+    const storedPublicId = JSON.parse(localStorage.getItem("publicId"));
+    if (storedPublicId) {
+      setPublicId(storedPublicId);
+    }
+
+    fetchUserData(storedPublicId);
   }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
     const storedPublicId = JSON.parse(localStorage.getItem("publicId"));
-      if (!storedPublicId) return;
+    if (!storedPublicId) return;
+    setPublicId(storedPublicId);
 
     const userData = {
       userName,
@@ -71,7 +75,7 @@ export function UpdateUser() {
     };
 
     try {
-      const response = await fetch(`/api/user/${publicId}`, {
+      const response = await fetch(`/api/user/${storedPublicId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
